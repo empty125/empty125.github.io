@@ -112,14 +112,8 @@ define(function(require, exports, module) {
            return target;
         },
         
-        updateArea:function(offset){
-           var me = this;
-           if(!offset){ 
-              offset = 0;
-           }else{
-              offset = parseInt(offset);
-              offset = isNaN(offset)? 0 : offset;
-           }
+        updateArea:function(){
+	   var offset = 0,me=this;
            for(;offset<me._items.length;offset++){
                me.setArea(me._items[offset]);
                me._items[offset].data('dnd_id',offset+1);
@@ -133,7 +127,7 @@ define(function(require, exports, module) {
            target.parent().detach(); 
            if(dnd_id){
                this._items.splice(dnd_id-1,1);
-               this.updateArea(dnd_id-1);
+               this.updateArea();
            }
         },
         
@@ -223,7 +217,7 @@ define(function(require, exports, module) {
                     handle['drop'] = this._defaultDrop;                    
                 }
                 handle['drop'].call(this,this._appendType,this._target,this._lastHit);
-                this.updateArea(0);
+                this.updateArea();
             }
             if(this._lastHit && this._draghoverCls){
                this._lastHit.removeClass(this._draghoverCls);
@@ -313,10 +307,12 @@ define(function(require, exports, module) {
                        _copy.addClass(e.data.handle.draggingCls);
                     }
                     dnd._dragoffset = offset;
+		    
+		    dnd.setCurrentItem(_this,_copy);    
                     if(J.type(handle['drag']) == "function"){
                         handle['drag'].call(e.data.dnd);
                     }
-                    dnd.setCurrentItem(_this,_copy);                    
+                                    
                 },100);//延迟100ms的好处不言而喻
                 
             });
