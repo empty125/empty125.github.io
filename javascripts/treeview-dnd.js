@@ -351,6 +351,10 @@ define(function(require, exports, module) {
                 dnd._copy.detach();
                 dnd.updateItem();
             });
+	    
+	    J(window).bind('resize',{dnd:this},function(e){
+                e.data.dnd.updateArea();
+            });
         },
         
         _getHandle:function(target){
@@ -393,8 +397,8 @@ define(function(require, exports, module) {
              }
              _attrs['data-level'] = level;
              _level = level;
-             level = this.levelsAttr[level-1];
-             
+             //level = this.levelsAttr[level-1];
+             level =J.extend({},this.levelsAttr[level-1]) ;
          }else{
              if(!attrs['level']){
                  return false;
